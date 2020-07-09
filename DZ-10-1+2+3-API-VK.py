@@ -5,8 +5,8 @@ from urllib.parse import urlencode
 
 OAUTH_URL = 'https://oauth.vk.com/authorize'
 APP_ID = 7533990  #получен СОИ по ссылке https://vk.com/editapp?act=create
-TOKEN = 'd6c5a3a20cb669b4b16ec66b94a9fa6c0f7a7f181da7c6099d97496b90918395d3c12385531a035e98d69' #получен СОИ 08.07.20
-#TOKEN = '959ee46eb78b742b5ee80b b968704aef92da579b4035475e70df4a7a5df432b0a6cbfb6eaa04dcd431f4b' #получен в Нетологии
+TOKEN = '123' #получен СОИ 08.07.20
+TOKEN = '959ee46eb78b742b5ee80b b968704aef92da579b4035475e70df4a7a5df432b0a6cbfb6eaa04dcd431f4b' #получен в Нетологии
 
 class VK_user:
     def __init__(self, token) -> None:
