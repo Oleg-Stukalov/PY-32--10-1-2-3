@@ -5,12 +5,23 @@ from urllib.parse import urlencode
 
 OAUTH_URL = 'https://oauth.vk.com/authorize'
 APP_ID = 7533990  #получен СОИ по ссылке https://vk.com/editapp?act=create
-TOKEN = '123' #получен СОИ 08.07.20
-TOKEN = '959ee46eb78b742b5ee80b b968704aef92da579b4035475e70df4a7a5df432b0a6cbfb6eaa04dcd431f4b' #получен в Нетологии
+TOKEN = '10b2e6b1a90a01875cfaa0d2dd307b7a73a15ceb1acf0c0f2a9e9c586f3b597815652e5c28ed8a1baf13c' #получен в Нетологии
 
-class VK_user:
-    def __init__(self, token) -> None:
-        self.token = token
+class VKUser:
+    def __init__(self, id=4326594, id2=2925854) -> None:
+        self.token = TOKEN
+        self.id = id
+        self.id2 = id2
+
+    # def __and__(self, other):
+    #     common_friends = user1 & user2
+    #     for friend in common_friends:
+    #         print(friend)
+    #     return [VKUser(51676659), VKUser(58597357), VKUser(3968335)]
+
+    def __str__(self): #вывести ссылку пользователя
+        url = 'www.vk.com/id'+str(self.id)
+        return url
 
     def get_user_ids(self, id): #вывести информацию о пользователе
         response = requests.get(
@@ -23,14 +34,9 @@ class VK_user:
         )
         name = json.loads(response.text)['response'][0]['first_name']
         last_name = json.loads(response.text)['response'][0]['last_name']
-        print(f'Данные по пользователю id{id} ({last_name} {name}): {response.text}')
+        print(f'Данные по пользователю id{self.id} ({last_name} {name}): {response.text}')
         #pprint(response.json())
         return response.json()
-
-    def print(self, id=5346546): #вывести ссылку пользователя
-        url = 'www.vk.com/id'+str(id)
-        print(f'URL страницы пользователя {id} в Вконтакте: {url}')
-        return url
 
     def get_status(self): #считать свой статус ВК
         response = requests.get(
@@ -53,7 +59,7 @@ class VK_user:
         )
         return response.json()
 
-    def get_friends(self, id=210700286): #считать друзей у пользователя
+    def get_friends(self, id): #считать друзей у пользователя
         response = requests.get(
             'https://api.vk.com/method/friends.get',
             params={
@@ -67,28 +73,33 @@ class VK_user:
         print(f'Пользователь с id{id} имеет следующих друзей: {data}')
         return response.json()
 
-    def common_friends(self, user1=5346546, user2=2925854): #отобрать общих друзей 2 пользователей
-        friends1 = self.get_friends(user1)
-        friends2 = self.get_friends(user2)
-        common_friends = []
-        for friend in friends1['response']['items']:
-            if friend in friends2['response']['items']:
-                #print('***', friend, type(friend))
-                common_friends.append(friend)
-        print(f'Пользователи {user1} и {user2} имеют {len(common_friends)} общих друзей: {common_friends}')
+    def common_friends(self, id, id2): #отобрать общих друзей 2 пользователей
+        friends1 = set(self.get_friends(id)['response']['items'])
+        friends2 = set(self.get_friends(id2)['response']['items'])
+        common_friends = friends1 & friends2
+        print(f'Пользователи {id} и {id2} имеют {len(common_friends)} общих друзей: {common_friends}')
         return common_friends
 
+        ###############backup-copy
+        # friends1 = self.get_friends(id)
+        # friends2 = self.get_friends(id2)
+        # common_friends = []
+        # for friend in friends1['response']['items']:
+        #     if friend in friends2['response']['items']:
+        #         #print('***', friend, type(friend))
+        #         common_friends.append(friend)
+        # print(f'Пользователи {id} и {id2} имеют {len(common_friends)} общих друзей: {common_friends}')
+        # return common_friends
 
-user0 = VK_user(TOKEN)
-user1 = VK_user(TOKEN)
-user2 = VK_user(TOKEN)
+user0 = VKUser(4326594)
+user1 = VKUser(5346546)
+user2 = VKUser(2925854)
 
-user0.get_user_ids(4326594)
-
+user0.get_user_ids(4326594) ##########Почему не выводится???????????
 user1.get_user_ids(5346546)
 user2.get_user_ids(2925854)
-user1.common_friends()
+user1.common_friends(5346546, 2925854)
+print(user2)
 
-user2.print()
-
+#user2.common_friends(user0, user1)
 
