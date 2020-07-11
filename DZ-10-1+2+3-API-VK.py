@@ -16,9 +16,9 @@ class VKUser:
     def __and__(self, other):
         id = self.id
         id2 = other.id
-        print('***', id, id2)
+        #print('***', id, id2)
         self.common_friends(id, id2)
-        print(f'Пользователи {id} и {id2} имеют {len(self.common_friends)} общих друзей: {self.common_friends}')
+        #print(f'Пользователи {id} и {id2} имеют {self.common_friends(id, id2)} общих друзей: {self.common_friends}')
         return self.common_friends
 
     def __str__(self): #вывести ссылку пользователя
@@ -71,7 +71,7 @@ class VKUser:
                 'v': 5.21
             }
         )
-        print('====', json.loads(response.text)['response']['items'])
+        #print('====', json.loads(response.text)['response']['items'])
         data = json.loads(response.text)['response']['items']
         print(f'Пользователь с id{id} имеет следующих друзей: {data}')
         return response.json()
@@ -104,5 +104,6 @@ user2.get_user_ids(2925854)
 user1.common_friends(5346546, 2925854)
 print(user2)
 
-user0.common_friends(user0, user1)
+print('Сложение по &: ')
+two_users = user1 & user2
 
